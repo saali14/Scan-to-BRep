@@ -1,0 +1,12 @@
+2023-07-27 15:16:19 INFO     Run on Commit 69077c5fd6149063f3b9d86945831b5b41b09acc from 2022-10-10.
+2023-07-27 15:16:23 INFO     Loading data for train
+2023-07-27 15:17:19 INFO     Loaded 28048 train instances.
+2023-07-27 15:17:19 INFO     Loading data for test
+2023-07-27 15:17:33 INFO     Loaded 5381 test instances.
+2023-07-27 15:17:33 INFO     GPU available: True (cuda), used: True
+2023-07-27 15:17:33 INFO     TPU available: False, using: 0 TPU cores
+2023-07-27 15:17:33 INFO     IPU available: False, using: 0 IPUs
+2023-07-27 15:17:33 INFO     HPU available: False, using: 0 HPUs
+2023-07-27 15:17:33 INFO     Loading training Set .28048
+2023-07-27 15:17:33 INFO     Loading testing Set .5381
+2023-07-27 15:17:34 INFO     LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [1]
