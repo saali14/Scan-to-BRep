@@ -19,6 +19,7 @@ class Resampler:
         if 'deterministic' in sample and sample['deterministic']:
             np.random.seed(sample['idx'])
             
+        # TODO@Srikanth: Why ? this will remove vertex with ID 0
         bIds = np.where(sample['BRepAnnot_vIds'])[0] # <--- Returns the idx / positions of Boundary Points in Scan
         jIds = np.where(sample['BRepAnnot_jIds'])[0] # <--- Returns the idx / positions of Junction Points in Scan
         neg_bj_id = np.setdiff1d(np.arange(sample['scan_pts'].shape[0]), np.union1d(bIds, jIds))

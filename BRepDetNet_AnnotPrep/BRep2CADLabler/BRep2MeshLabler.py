@@ -26,7 +26,8 @@ from BRep2CADLabler.dataStruct import LabelBoundaryDataStruct, LabelFaceDataStru
 
 from OCC.Extend import TopologyUtils
 from concurrent.futures import ProcessPoolExecutor
-
+import logging
+logger = logging.getLogger(__name__)
 
 class BRep2MeshLabler:
     def __init__(self, name):

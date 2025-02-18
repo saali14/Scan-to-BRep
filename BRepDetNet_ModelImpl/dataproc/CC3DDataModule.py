@@ -96,7 +96,8 @@ class CC3DDataModule(LightningDataModule):
 
         train_transforms = torchvision.transforms.Compose(train_transforms)
         test_transforms = torchvision.transforms.Compose(test_transforms)
-        return train_transforms, test_transforms
+        eval_transforms = torchvision.transforms.Compose(eval_transforms)
+        return train_transforms, test_transforms, eval_transforms
 
     def prepare_data(self):
         # do only on one process, e.g. download dataset
@@ -105,7 +106,7 @@ class CC3DDataModule(LightningDataModule):
     
     def setup(self, stage: Optional[str] = None):
         # do for every gpu
-        self.train_transform, self.test_transform = self.get_transforms()
+        self.train_transform, self.test_transform,self.eval_transforms = self.get_transforms()
 
         # Assign train/val datasets for use in dataloaders
         if stage == 'fit' or stage is None:
@@ -119,7 +120,7 @@ class CC3DDataModule(LightningDataModule):
 
         # Apply no transformations when evaluating dataset
         if stage == 'predict' or stage is None:
-            self.eval_set = CC3DDataSet(self.root_dir, self.scan_dir,self.annotBndry_dir, self.annotJnc_dir, subset='test',transform=eval_transforms, **self.kwargs)
+            self.eval_set = CC3DDataSet(self.root_dir, self.scan_dir,self.annotBndry_dir, self.annotJnc_dir, subset='test',transform=self.eval_transforms, **self.kwargs)
             self.sampleIds = self.eval_set.samples
             
         self.collate_fn = None
