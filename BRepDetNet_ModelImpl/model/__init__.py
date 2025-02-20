@@ -20,7 +20,7 @@ def load_model(model, checkpoint_path, kwargs):
         except RuntimeError as e:
             logger = logging.getLogger('core')
             logger.warning('Could not load model strict. Try without strict.')
-            logger.warning(e)
+            # logger.warning(e)
             return m.load_from_checkpoint(checkpoint_path, strict=False, **kwargs)
 
     return m(**kwargs)

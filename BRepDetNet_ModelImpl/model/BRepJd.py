@@ -53,7 +53,8 @@ class BRepJd(LightningModule):
             self.emb_nn = DGCNN(emb_dims=self.emb_dims, dropout=self.dropout)
         else:
             raise Exception('Not implemented')
-        
+        self.emb_nn = self.emb_nn.to(self.devc)
+
         loss_weights = {'jnc_focal_loss':1.0,}
         accuracy_weights = {'jnc_accuracy': 1.0}
         self.detection_loss = None
@@ -72,7 +73,10 @@ class BRepJd(LightningModule):
         self.accuracy = TotalAccuracy(weights=accuracy_weights)   
         self.ll1 = nn.Conv1d(self.emb_dims, 1, 1, stride=1, padding=0, device=self.devc)
         self.ll2 = nn.Conv1d(self.emb_dims, 1, 1, stride=1, padding=0, device=self.devc)
-    
+
+        self.ll1 = self.ll1.to(self.devc)
+        self.ll2 = self.ll2.to(self.devc)
+
     @staticmethod
     def add_model_specific_args(parent_parser):
         parser = ArgumentParser(parents=[parent_parser], add_help=False)
@@ -161,6 +165,7 @@ class BRepJd(LightningModule):
 
     def predict_step(self, batch, batch_idx, dataloader_idx = None):
         scan_pts = torch.tensor(batch['scan_pts'][:, :, :3], dtype=torch.float32, requires_grad=True).transpose(2, 1)
+        scan_pts = scan_pts.to(self.devc)
         return self(scan_pts)
 
     def configure_optimizers(self):

@@ -54,6 +54,8 @@ class BRepEd(LightningModule):
         else:
             raise Exception('Not implemented')
         
+        self.emb_nn = self.emb_nn.to(self.devc)
+
         loss_weights = {
             'bndry_bce_loss':1.0,
             'bndry_focal_loss':2.0,
@@ -75,7 +77,8 @@ class BRepEd(LightningModule):
         self.loss = TotalLoss(weights=loss_weights)
         self.accuracy = TotalAccuracy(weights=accuracy_weights)   
         self.ll1 = nn.Conv1d(self.emb_dims, 1, 1, stride=1, padding=0, device=self.devc)
-    
+        self.ll1 = self.ll1.to(self.devc)
+
     @staticmethod
     def add_model_specific_args(parent_parser):
         parser = ArgumentParser(parents=[parent_parser], add_help=False)
@@ -161,6 +164,8 @@ class BRepEd(LightningModule):
 
     def predict_step(self, batch, batch_idx, dataloader_idx = None):
         scan_pts = torch.tensor(batch['scan_pts'][:, :, :3], dtype=torch.float32, requires_grad=True).transpose(2, 1)
+        scan_pts = scan_pts.to(self.devc)
+
         return self(scan_pts)
 
     def configure_optimizers(self):
