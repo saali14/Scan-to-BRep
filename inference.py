@@ -74,12 +74,11 @@ def detect(
     all_preds[sampledIDx] = preds
     return point_cloud, all_preds
 
-
-if __name__ == "__main__":
+def main() :
     logger.info(f"""Using: {"cuda" if torch.cuda.is_available() else "cpu"}...""")
 
-    Ed_checkpoint_path = "BRepDetNet_CheckPoints/CC3D/BRepEd/train/version_5/checkpoint/last.ckpt"
-    Jd_checkpoint_path = "BRepDetNet_CheckPoints/CC3D/BRepJd/train/version_19/checkpoint/last.ckpt"
+    Ed_checkpoint_path = "BRepDetNet_CheckPoints/ABC/BRepEd/train/version_4/checkpoint/last.ckpt"
+    Jd_checkpoint_path = "BRepDetNet_CheckPoints/ABC/BRepJd/train/version_0/checkpoint/last.ckpt"
 
     scan_file = "/home/srikanth/Documents/bits/BRep/datasets/annotations/CC3D/Scan/User Library-8mm motor.ply"
     # Or a numpy point cloud
@@ -91,9 +90,9 @@ if __name__ == "__main__":
 
     # Select only Detected Edges
     logger.info("Predicting Junctions...")
-    _, junctions = detect("BRepJd", Ed_checkpoint_path, 4192, scan_np_array=point_cloud[edges == 1])
+    _, junctions = detect("BRepJd", Jd_checkpoint_path, 4192, scan_np_array=point_cloud[edges == 1])
 
-    full_junctions_labels = np.zeros(len(point_cloud))  # A non edge is a non junction
+    full_junctions_labels = np.zeros(len(point_cloud), dtype=int)  # A non edge is a non junction
     full_junctions_labels[edges == -1] = -1  # Skipped during downsample; so no label
     full_junctions_labels[edges == 1] = junctions  # Junction labels
 
@@ -103,3 +102,8 @@ if __name__ == "__main__":
     )
 
     logger.info("Done, output saved to output.npz...")
+    # Note: -1 in predicitons represetns no label due point skipped during downsampling
+
+if __name__ == "__main__":
+    main()
+    
