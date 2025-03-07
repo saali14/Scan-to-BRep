@@ -89,32 +89,3 @@ class LabelBoundaryDataStruct:
             j_mateface_Id1s = data["j_mateface_Id1s"],
             j_mateface_Id2s = data["j_mateface_Id2s"]
         )
-
-class LabelFaceDataStruct:
-    def __init__(self, data=None):
-        if data == None:
-            self.data = {"v_face_Ids": [], 
-                        "v_face_type": [],
-                        "v_face_feat": [],
-            }
-        else:
-            return
-    
-    def load_npz_FaceVertsLabel(self, ):
-        return
-    
-    def save_npz_data_BRep2CAD_FaceVertsLabel(self, output_pathname, data):
-        num_face_Ids = np.asarray(data["v_face_Ids"]).shape[0]
-        num_face_type = np.asarray(data["v_face_type"]).shape[0]
-        num_face_feat = np.asarray(data["v_face_feat"]).shape[0]
-                
-        # make a check if the lengths of all arrays are same or not!
-        #TODO::
-        
-        np.savez(
-            output_pathname,
-            # NOTE Edge-Related Attributes 
-            v_face_Ids = data["v_face_Ids"],
-            v_face_type = data["v_face_type"],
-            v_face_feat  = data["v_face_feat"],
-            )

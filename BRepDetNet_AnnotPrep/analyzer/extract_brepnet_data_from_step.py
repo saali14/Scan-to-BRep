@@ -135,71 +135,6 @@ class BRepExtractor:
         
         return transformed_solid, center_array, scale
 
-    """
-    def process(self):
-        #
-        #Process the file and extract the derivative datafrom
-        #
-        # Load the body from the STEP file
-        body = self.load_body_from_step()
-
-        # We want to apply a transform so that the solid
-        # is centered on the origin and scaled so it just fits
-        # into a box [-1, 1]^3
-        if self.scale_body:
-            body = scale_solid_to_unit_box(body)
-
-        top_exp = TopologyUtils.TopologyExplorer(body, ignore_orientation=True)
-
-        if not self.check_manifold(top_exp):
-            print("Non-manifold bodies are not supported")
-            return
-        if not self.check_closed(body):
-            print("Bodies which are not closed are not supported")
-            return
-        if not self.check_unique_coedges(top_exp):
-            print("Bodies where the same coedge is used in multiple loops are not supported")
-            return
-
-        entity_mapper = EntityMapper(body)
-
-        face_features = self.extract_face_features_from_body(body, entity_mapper)
-        edge_features = self.extract_edge_features_from_body(body, entity_mapper)
-        coedge_features = self.extract_coedge_features_from_body(body, entity_mapper)
-
-        face_point_grids = self.extract_face_point_grids(body, entity_mapper)
-        assert face_point_grids.shape[1] == 7
-        coedge_point_grids = self.extract_coedge_point_grids(body, entity_mapper)
-        assert coedge_point_grids.shape[1] == 12
-
-        coedge_lcs = self.extract_coedge_local_coordinate_systems(body, entity_mapper)
-        coedge_reverse_flags = self.extract_coedge_reverse_flags(body, entity_mapper)
-
-        next, mate, face, edge = self.build_incidence_arrays(body, entity_mapper)
-
-        coedge_scale_factors = self.extract_scale_factors(
-            next, mate, face, face_point_grids, coedge_point_grids
-        )
-
-        output_pathname = self.output_dir / f"{self.step_file.stem}.npz"
-        np.savez(
-            output_pathname,
-            face_features=face_features,
-            face_point_grids=face_point_grids,
-            edge_features=edge_features,
-            coedge_point_grids=coedge_point_grids,
-            coedge_features=coedge_features,
-            coedge_lcs=coedge_lcs,
-            coedge_scale_factors=coedge_scale_factors,
-            coedge_reverse_flags=coedge_reverse_flags,
-            next=next,
-            mate=mate,
-            face=face,
-            edge=edge,
-            savez_compressed=True,
-        )
-    """
-
     def load_body_from_step(self):
         """
         Load the body from the step file.
@@ -260,74 +195,8 @@ class BRepExtractor:
         """
         return sum(1 for e in top_exp.edges())
 
-    def face_type(self, face):
-        """
-        Extract the face type, possible face types are: Plane, Cylinder, Cone, Sphere,
-        Torus, BezierSurface, BSplineSurface, SurfaceOfRevolution, SurfaceOfExtrusion,
-        OtherSurface.
-        """
-        surface = BRepAdaptor_Surface(face)
-        surface_type = surface.GetType()
-        if surface_type == GeomAbs_Plane:
-            return "Plane"
-        elif surface_type == GeomAbs_Cylinder:
-            return "Cylinder"
-        elif surface_type == GeomAbs_Cone:
-            return "Cone"
-        elif surface_type == GeomAbs_Sphere:
-            return "Sphere"
-        elif surface_type == GeomAbs_Torus:
-            return "Torus"
-        elif surface_type == GeomAbs_BezierSurface:
-            return "Bezier_surface"
-        elif surface_type == GeomAbs_BSplineSurface:
-            return "BSplineSurface"
-        elif surface_type == GeomAbs_SurfaceOfRevolution:
-            return "SurfaceOfRevolution"
-        elif surface_type == GeomAbs_SurfaceOfExtrusion:
-            return "SurfaceOfExtrusion"
-        elif surface_type == GeomAbs_OtherSurface:
-            return "OtherSurface"
-        return "unsupported face type"
-
-    def face_type_counts(self, top_exp):
-        face_types = [self.face_type(face) for face in top_exp.faces()]
-        return {type: face_types.count(type) for type in face_types}
-
     def face_properties(self, face):
         properties = {}
-        surface = BRepAdaptor_Surface(face)
-        surface_type = surface.GetType()
-        if surface_type == GeomAbs_Plane:
-            gp_pln = surface.Plane()
-            properties = self.plane_features(gp_pln, face)
-        elif surface_type == GeomAbs_Cylinder:
-            gp_cylinder = surface.Cylinder()
-            properties = self.cylinder_features(gp_cylinder, face)
-        elif surface_type == GeomAbs_Cone:
-            gp_cone = surface.Cone()
-            properties = self.cone_features(gp_cone, face)
-        elif surface_type == GeomAbs_Sphere:
-            gp_sphere = surface.Sphere()
-            properties = self.sphere_features(gp_sphere, face)
-        elif surface_type == GeomAbs_Torus:
-            gp_torus = surface.Torus()
-            properties = self.torus_features(gp_torus, face)
-        elif surface_type == GeomAbs_BezierSurface:
-            gp_BezierSurface = surface.Bezier()
-            properties = self.BezierSurface_features(gp_BezierSurface, face)
-        elif surface_type == GeomAbs_BSplineSurface:
-            gp_BSplineSurface = surface.BSpline()
-            properties = self.BSplineSurface_features(gp_BSplineSurface, face)
-        elif surface_type == GeomAbs_SurfaceOfRevolution:
-            properties["type"] = "SurfaceOfRevolution"
-            properties["more"] = "not implemented"
-        elif surface_type == GeomAbs_SurfaceOfExtrusion:
-            properties["type"] = "SurfaceOfExtrusion"
-            properties["more"] = "not implemented"
-        elif surface_type == GeomAbs_OtherSurface:
-            properties["type"] = "OtherSurface"
-            properties["more"] = "not implemented"
         geometry_properties = GProp_GProps()
         brepgprop_SurfaceProperties(face, geometry_properties)
         area = geometry_properties.Mass()
@@ -529,17 +398,6 @@ class BRepExtractor:
 
         xmin, ymin, zmin, xmax, ymax, zmax = bbox.Get()
         return xmin, ymin, zmin, xmax, ymax, zmax, xmax - xmin, ymax - ymin, zmax - zmin
-
-    def extract_face_features_from_body(self, body, entity_mapper):
-        """
-        Extract the face features from each face of the body
-        """
-        top_exp = TopologyUtils.TopologyExplorer(body, ignore_orientation=True)
-        face_features = []
-        for face in top_exp.faces():
-            assert len(face_features) == entity_mapper.face_index(face)
-            face_features.append(self.extract_features_from_face(face))
-        return np.stack(face_features)
     
     def extract_edge_info_from_body(self, body, entity_mapper):
         """
@@ -555,34 +413,6 @@ class BRepExtractor:
         
         return np.stack(edge_features)
         
-    def extract_face_info_from_body(self, body, entity_mapper):
-        """
-        Extract the face features from each face of the body
-        """
-        top_exp = TopologyUtils.TopologyExplorer(body, ignore_orientation=True)
-        face_point_grids = []
-        face_features = []
-        face_ID = []
-        for face in top_exp.faces():
-            assert len(face_features) == entity_mapper.face_index(face)
-            face_ID.append(entity_mapper.face_index(face))
-            face_features.append(self.face_properties(face))
-
-        try:
-            solid = Solid(body) # TODO @Anis Deal with Assertion Error like the problem of coedges --> Discard the examples where we fail to convert into solid such as in extract_coedge_point_grids
-            for face in solid.faces():
-                assert len(face_point_grids) == entity_mapper.face_index(face.topods_shape())
-                face_point_grids.append(self.extract_face_point_grid(face))
-
-            assert len(face_features) == len(face_point_grids) #NOTE Make sure that the face_features and face_point_grids have the same number of faces
-            """
-            TOCHECK: @Anis face_features and face_point_grids have the same IDs (concide) --> Not sure 
-            """
-            return np.stack(face_ID), np.stack(face_features), face_point_grids
-        except Exception:
-            print("An unknown exception has occurred ... passing to next sample")
-            pass
-
     def extract_edge_features_from_body(self, body, entity_mapper):
         """
         Extract the edge features from each edge of the body
@@ -608,27 +438,6 @@ class BRepExtractor:
                 coedge_features.append(self.extract_features_from_coedge(coedge))
 
         return np.stack(coedge_features)
-
-    def extract_features_from_face(self, face):
-        face_features = []
-        for feature in self.feature_schema["face_features"]:
-            if feature == "Plane":
-                face_features.append(self.plane_feature(face))
-            elif feature == "Cylinder":
-                face_features.append(self.cylinder_feature(face))
-            elif feature == "Cone":
-                face_features.append(self.cone_feature(face))
-            elif feature == "SphereFaceFeature":
-                face_features.append(self.sphere_feature(face))
-            elif feature == "TorusFaceFeature":
-                face_features.append(self.torus_feature(face))
-            elif feature == "FaceAreaFeature":
-                face_features.append(self.area_feature(face))
-            elif feature == "RationalNurbsFaceFeature":
-                face_features.append(self.rational_nurbs_feature(face))
-            else:
-                assert False, "Unknown face feature"
-        return np.array(face_features)
 
     def extract_features_from_edge(self, edge, faces):
         feature_list = self.feature_schema["edge_features"]
@@ -914,36 +723,6 @@ class BRepExtractor:
         properties["u_bounds"] = Edge(edge).u_bounds()
         return properties
     
-    def plane_feature(self, face):
-        surf_type = BRepAdaptor_Surface(face).GetType()
-        if surf_type == GeomAbs_Plane:
-            return 1.0
-        return 0.0
-
-    def cylinder_feature(self, face):
-        surf_type = BRepAdaptor_Surface(face).GetType()
-        if surf_type == GeomAbs_Cylinder:
-            return 1.0
-        return 0.0
-
-    def cone_feature(self, face):
-        surf_type = BRepAdaptor_Surface(face).GetType()
-        if surf_type == GeomAbs_Cone:
-            return 1.0
-        return 0.0
-
-    def sphere_feature(self, face):
-        surf_type = BRepAdaptor_Surface(face).GetType()
-        if surf_type == GeomAbs_Sphere:
-            return 1.0
-        return 0.0
-
-    def torus_feature(self, face):
-        surf_type = BRepAdaptor_Surface(face).GetType()
-        if surf_type == GeomAbs_Torus:
-            return 1.0
-        return 0.0
-
     def area_feature(self, face):
         geometry_properties = GProp_GProps()
         brepgprop_SurfaceProperties(face, geometry_properties)

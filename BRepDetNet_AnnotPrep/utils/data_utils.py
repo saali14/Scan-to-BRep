@@ -133,55 +133,6 @@ def load_labels(label_pathname):
         labels = np.expand_dims(labels, 0)
     return labels
 
-def make_ftype_colors(faces_type):
-    labels= []
-    for face_type in faces_type:
-        if face_type in ['Plane']:
-            label = [1 , 0 , 0]
-        elif face_type in ['Cylinder']:
-            label = [0 , 1 , 0]
-        elif face_type in ['Cone']:
-            label = [1 , 1 , 0]
-        elif face_type in ['Sphere']:
-            label = [1 , 0 , 1]
-        elif face_type in ['Torus']:
-            label = [0 , 1 , 1]
-        elif face_type in ['Bezier_surface']:
-            label = [0.5, 0.5 , 0]
-        elif face_type in ['BSplineSurface']:
-            label = [0 , 0.5 , 0.5]
-        else:
-            label = [0. , 0. , 0.]
-        labels.append(label)
-    return labels
-
-def filterPSECC3D(pathname, labelOut_pathname, save=False):
-    PSE_pcd = o3d.io.read_point_cloud(pathname)
-    v = []
-    c = []
-    ids  = []
-    for i in range(0, len(np.asarray(PSE_pcd.points))):
-        if PSE_pcd.colors[i][0] != 0.0 and PSE_pcd.colors[i][1] != 0.0 and PSE_pcd.colors[i][2] != 0.0:
-            v.append(np.asarray(PSE_pcd.points[i]))
-            c.append(np.asarray(PSE_pcd.colors[i]))
-            ids.append(i)
-    
-    filename = os.path.splitext(os.path.basename(labelOut_pathname))[0]
-    extension = os.path.splitext(os.path.basename(labelOut_pathname))[1]
-    
-    if save == True:
-        if extension == ".npz":
-            np.savez(pathname, vertices=v, colors=c, indices=ids, savez_compressed=True,)
-        elif extension == ".ply":
-            pse_filtered = o3d.geometry.PointCloud()
-            pse_filtered.points = o3d.utility.Vector3dVector(np.array(v).reshape(len(v), 3))
-            pse_filtered.colors = o3d.utility.Vector3dVector(np.array(c).reshape(len(c), 3))
-            o3d.io.write_point_cloud(labelOut_pathname, pse_filtered)
-        else:
-            print("The output format is NOT handled")
-        
-    return v, c, ids
-    
 def load_BRepBoundarylabels(label_pathname_npz):
     with np.load(label_pathname_npz) as data:
         npz_data = {
@@ -241,93 +192,6 @@ def decodeBndryJncLabels(args):
             
         o3d.visualization.draw_geometries([loopPcd])
     
-def reconstrct_BndryFromAnnot(label_pathname):
-    BrepLabels = load_BRepBoundarylabels(label_pathname)
-    BrepBoundaryPoints = []
-    
-    if BrepLabels["v_edgefeats"]["type"] == "hyperbola":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "parabola":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "ellipse":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "circle":
-        cx, cy, cz = BrepLabels["v_edgefeats"]["center"]
-        r = BrepLabels["v_edgefeats"]["radius"]
-        ax, ay, az, cx, cy, cz = BrepLabels["v_edgefeats"]["axis"]
-        umin, umax = BrepLabels["v_edgefeats"]["u_bounds"]
-        """
-        # NOTE: testing the reconstruction:
-        # https://meshlogic.github.io/posts/jupyter/curve-fitting/fitting-a-circle-to-cluster-of-3d-points/
-        # also 
-        # --> https://stackoverflow.com/questions/61047848/plot-a-point-in-3d-space-perpendicular-to-a-line-vector
-        A = np.array([ax, ay, az]) - np.array([cx, cy, cz])
-        uniA =  A / np.linalg.norm(A)
-        
-        UniA_abs = [abs(uniA[0]), abs(uniA[1]), abs(uniA[2])]
-        maxUniA = max(UniA_abs[0], UniA_abs[1], UniA_abs[2]) 
-        minUniA = min(UniA_abs[0], UniA_abs[1], UniA_abs[2]) 
-        
-        #Initialise 3 variables to store which array indexes contain the (max, medium, min) vector magnitudes.
-        maxindex = 0
-        medindex = 0
-        minindex = 0
-        
-        # Loop through p_abs array to find which magnitudes are 
-        # equal to maxval & minval. Store their indexes for use later
-        for p in UniA_abs:
-            if p == maxUniA: 
-                maxindex = i
-            elif p_abs[i] == minval: 
-                minindex = i
-
-        for u in range (umin, umax):
-            x_u = cx + (r * math.cos(u)) 
-            y_u = cy + (r * math.cos(u))
-            z_u = cz + (r * math.cos(u))
-        
-        return None
-        
-    elif BrepLabels["v_edgefeats"]["type"] == "line":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "bezier":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "offset":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "bspline":
-        return None
-    
-    elif BrepLabels["v_edgefeats"]["type"] == "bspline":
-        return None
-    
-    else:
-        properties["center"] = [CircularCurve.Location().X(), 
-                                CircularCurve.Location().Y(), 
-                                CircularCurve.Location().Z(),]
-        
-        properties["radius"] = CircularCurve.Radius()
-        
-        #NOTE: Returns the main axis of the circle. It is the axis perpendicular to the 
-        #      plane of the circle, passing through the "Location" point (center) of the circle.
-        properties["axis"] = [CircularCurve.Axis().Direction().X(),
-                              CircularCurve.Axis().Direction().Y(),
-                              CircularCurve.Axis().Direction().Z(),
-                              CircularCurve.Axis().Location().X(),
-                              CircularCurve.Axis().Location().Y(),
-                              CircularCurve.Axis().Location().Z(),]
-        
-        properties["perimeter"] = CircularCurve.Length() 
-        
-        properties["u_bounds"] = Edge(edge).u_bounds()"""
-        
-    return BrepLabels
-
 def reconstruct_FacesFromAnnot():
     return 
 
@@ -390,24 +254,6 @@ def viewSelectCADBRepAnnot(args):
 
     
     print("Step Files : " + str(countBRep) + " and Annotations : " + str(countAnnot))
-
-    """
-    for f in range(len(gtscan)):
-        # check if annot exists or continue to next
-        print(gtscan[f])
-        if os.path.exists(bannots[f]) and os.path.exists(jannots[f]):
-                        
-            #choice = input("Delete (Y|N) ??")
-            #if choice == 'Y' or choice == 'y':
-                #_id = input("Id to Keep (e.g., 2 or 3)??")
-                
-                ##for i in map(int, _ids.split(" ")) : 
-                #for i in range(1, len(listS)):
-                    #if i != int(_id): 
-                        #os.system("rm " + textures[i-1])
-                        #os.system("rm " + mtrls[i-1])
-                        #os.system("rm " + ptscans[i-1])
-    """
 
 def viewAllCAD(args):
     """view scans, cads and edges pairwise"""

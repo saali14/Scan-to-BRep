@@ -148,48 +148,6 @@ def _parse_args():
                         choices=(['.npz', '.pkl', '.ply']), default='.npz', 
                         help="Format of labels of Scan Points / BRep PSE+PSF as Line-Sets. Default is '.npz'")
     parser_labelBRepBndry2ScanABC.set_defaults(func=brep2meshL.labelBRepBndry2ScanABC)
-    
-    
-    parser_labelBRepFace2ScanABC = subparsers.add_parser("labelBRepFace2ScanABC", 
-        help="Label the Edges + Faces of CAD w.r.t faces, Edges of BReps",)
-    parser_labelBRepFace2ScanABC.add_argument("--step_path", type=str, required=True, 
-        help="Path to load the step files from")
-    parser_labelBRepFace2ScanABC.add_argument("--scan_path", type=str, required=True,
-        help="Path to load the 3D scan files from",)
-    parser_labelBRepFace2ScanABC.add_argument("--output", type=str, required=True,
-        help="Path to the save intermediate brep data as PSE + PSF & Labelled Scan Points",)
-    parser_labelBRepFace2ScanABC.add_argument("--nProc", type=int, default=1,
-        help="Number of worker threads",)
-    parser_labelBRepFace2ScanABC.add_argument("--feature_list", type=str, required=False,
-        help="Optional path to the feature lists",)
-    parser_labelBRepFace2ScanABC.add_argument("--fRegen", type=bool, required=False, default=False,
-        help="To regenerate the stepFiles",)
-    parser_labelBRepFace2ScanABC.add_argument("--scale_brep", type=bool, required=False, default=True,
-        help="To normalize the BRep body in [-1, 1]^3 box",)
-    parser_labelBRepFace2ScanABC.add_argument("--debug", action="store_true",
-        help="Whether to save the intermediate point clouds with labels as colors",)
-    parser_labelBRepFace2ScanABC.add_argument("--infmt", required=False, choices=([".stp", ".step"]), default=".stp",
-        help="Format of STEP files. Default is '.step'",)
-    parser_labelBRepFace2ScanABC.add_argument("--infmt_scan", required=False, choices=([".ply", ".obj", ".npz"]), default=".obj",
-        help="Format of PCL/mesh. Default is '.obj'",)
-    parser_labelBRepFace2ScanABC.add_argument("--ofmt", required=False, choices=([".npz"]), default=".npz",
-        help="Format of labels of Scan Points / BRep PSE+PSF as Line-Sets. Default is '.npz'",)
-    parser_labelBRepFace2ScanABC.set_defaults(func=brep2meshL.labelBRepFace2ScanABC)
-
-
-    parser_labelBRepFace2Scan = subparsers.add_parser("labelBRepFace2Scan", help="Label the Edges + Faces of CAD w.r.t faces, Edges of BReps",)
-    parser_labelBRepFace2Scan.add_argument("--step_path", type=str, required=True, help="Path to load the step files from")
-    parser_labelBRepFace2Scan.add_argument("--scan_path", type=str, required=True, help="Path to load the 3D scan files from",)
-    parser_labelBRepFace2Scan.add_argument("--output", type=str, required=True, help="Path to the save intermediate brep data as PSE + PSF & Labelled Scan Points",)
-    parser_labelBRepFace2Scan.add_argument("--nProc", type=int, default=1, help="Number of worker threads",)
-    parser_labelBRepFace2Scan.add_argument("--feature_list", type=str, required=False, help="Optional path to the feature lists",)
-    parser_labelBRepFace2Scan.add_argument("--fRegen", type=bool, required=False, default=False, help="To regenerate the stepFiles",)
-    parser_labelBRepFace2Scan.add_argument("--scale_brep", type=bool, required=False, default=True, help="To normalize the BRep body in [-1, 1]^3 box",)
-    parser_labelBRepFace2Scan.add_argument("--debug", action="store_true", help="Whether to save the intermediate point clouds with labels as colors",)
-    parser_labelBRepFace2Scan.add_argument("--infmt", required=False, choices=([".stp", ".step"]), default=".stp", help="Format of STEP files. Default is '.step'",)
-    parser_labelBRepFace2Scan.add_argument("--infmt_scan", required=False,choices=([".ply", ".stl", ".npz"]), default=".npz", help="Format of PCL/mesh. Default is '.npz'",)
-    parser_labelBRepFace2Scan.add_argument("--ofmt", required=False, choices=([".npz"]), default=".npz", help="Format of labels of Scan Points / BRep PSE+PSF as Line-Sets. Default is '.npz'",)
-    parser_labelBRepFace2Scan.set_defaults(func=brep2meshL.labelBRepFace2Scan)
 
     parser_labelBRepFaceTypes = subparsers.add_parser("labelBRepFaceTypes", help="Label the Face types of BReps",)
     parser_labelBRepFaceTypes.add_argument("--step_path", type=str, required=True, help="Path to load the step files from")
