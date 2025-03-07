@@ -1,0 +1,29 @@
+name: Scan2BRep
+channels:
+  - conda-forge
+  - defaults
+  - lambouj
+  #- intel
+  - pytorch
+dependencies:
+  - python=3.8
+  - cudatoolkit=11.3
+  - pytorch=1.12.1
+  - torchvision=0.13.1
+  - pythonocc-core=7.5.1
+  - igl
+  - numpy
+  - tqdm
+  - occwl
+  - pyyaml
+  - addict
+  - pandas
+  - plyfile
+  - pip:
+    - open3d==0.15.2
+    - torchmetrics==0.11.1
+    - pytorch-lightning==1.7.7
+    - h5py
+    - protobuf==3.20
+    - scikit-learn
+

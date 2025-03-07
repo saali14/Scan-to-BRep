@@ -1,0 +1,35 @@
+2023-08-02 05:45:35 INFO     Run on Commit 69077c5fd6149063f3b9d86945831b5b41b09acc from 2022-10-10.
+2023-08-02 05:45:39 INFO     Loading data for train
+2023-08-02 05:46:58 INFO     Loaded 22539 train instances.
+2023-08-02 05:46:58 INFO     Loading data for test
+2023-08-02 05:47:08 INFO     Loaded 2987 test instances.
+2023-08-02 05:47:08 INFO     Multiprocessing is handled by SLURM.
+2023-08-02 05:47:08 INFO     GPU available: True (cuda), used: True
+2023-08-02 05:47:08 INFO     TPU available: False, using: 0 TPU cores
+2023-08-02 05:47:08 INFO     IPU available: False, using: 0 IPUs
+2023-08-02 05:47:08 INFO     HPU available: False, using: 0 HPUs
+2023-08-02 05:47:08 INFO     Loading training Set .22539
+2023-08-02 05:47:08 INFO     Loading testing Set .2987
+2023-08-02 05:47:08 INFO     LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+2023-08-02 05:47:08 INFO     
+   | Name           | Type                   | Params
+-----------------------------------------------------------
+0  | emb_nn         | DGCNN                  | 157 K 
+1  | detection_loss | FocalLossNew           | 0     
+2  | train_lossAcc  | DetLossAcccMetrics     | 0     
+3  | val_lossAcc    | DetLossAcccMetrics     | 0     
+4  | test_lossAcc   | DetLossAcccMetrics     | 0     
+5  | train_metrics  | PrecisionRecallMetrics | 0     
+6  | val_metrics    | PrecisionRecallMetrics | 0     
+7  | test_metrics   | PrecisionRecallMetrics | 0     
+8  | loss           | TotalLoss              | 0     
+9  | accuracy       | TotalAccuracy          | 0     
+10 | ll1            | Conv1d                 | 129   
+11 | ll2            | Conv1d                 | 129   
+12 | ll3            | Conv1d                 | 387   
+-----------------------------------------------------------
+157 K     Trainable params
+0         Non-trainable params
+157 K     Total params
+0.632     Total estimated model params size (MB)
+2023-08-02 05:47:09 INFO     SLURM auto-requeueing enabled. Setting signal handlers.

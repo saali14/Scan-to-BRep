@@ -1,0 +1,20 @@
+{
+    "face_features": [
+        "FaceAreaFeature"
+    ],
+    "edge_features": [
+        "Concave edge",
+        "Convex edge",
+        "Smooth",
+        "EdgeLengthFeature",
+        "CircularEdgeFeature",
+        "ClosedEdgeFeature",
+        "EllipticalEdgeFeature",
+        "NonRationalBSplineEdgeFeature",
+        "RationalBSplineEdgeFeature",
+        "StraightEdgeFeature"
+    ],
+    "coedge_features": [
+        "ReversedCoEdgeFeature"
+    ]
+}

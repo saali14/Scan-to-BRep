@@ -1,0 +1,28 @@
+2023-09-22 03:18:54 INFO     Run on Commit 69077c5fd6149063f3b9d86945831b5b41b09acc from 2022-10-10.
+2023-09-22 03:18:56 INFO     Loading data for train
+2023-09-22 03:42:57 INFO     Loaded 5499 train instances.
+2023-09-22 03:42:57 INFO     Loading data for val
+2023-09-22 03:52:04 INFO     Loaded 1332 val instances.
+2023-09-22 03:52:04 INFO     GPU available: True (cuda), used: True
+2023-09-22 03:52:04 INFO     TPU available: False, using: 0 TPU cores
+2023-09-22 03:52:04 INFO     IPU available: False, using: 0 IPUs
+2023-09-22 03:52:04 INFO     HPU available: False, using: 0 HPUs
+2023-09-22 03:52:05 INFO     Loading training Set .5499
+2023-09-22 03:52:05 INFO     Loading testing Set .1332
+2023-09-22 03:52:05 INFO     LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+2023-09-22 03:52:05 INFO     
+  | Name           | Type                      | Params
+-------------------------------------------------------------
+0 | emb_nn         | DGCNN                     | 157 K 
+1 | detection_loss | FocalLossJnc              | 0     
+2 | test_lossAcc   | DetLossAcccMetricsJnc     | 0     
+3 | test_metrics   | PrecisionRecallMetricsJnc | 0     
+4 | loss           | TotalLoss                 | 0     
+5 | accuracy       | TotalAccuracy             | 0     
+6 | ll1            | Conv1d                    | 129   
+7 | ll2            | Conv1d                    | 129   
+-------------------------------------------------------------
+157 K     Trainable params
+0         Non-trainable params
+157 K     Total params
+0.630     Total estimated model params size (MB)

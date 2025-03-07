@@ -1,0 +1,17 @@
+stage: val, epoch: 0, bndry_loss: 0.383503, jnc_loss: 0.412295, total_loss: 0.383503, bndry_acc: 0.683037, jnc_acc: 0.805980, total_acc: 0.744509
+stage: val, epoch: 0, bndry_loss: 0.376559, jnc_loss: 0.411293, total_loss: 0.376559, bndry_acc: 0.711988, jnc_acc: 0.775844, total_acc: 0.743916
+stage: train, epoch: 0, bndry_loss: 0.411526, jnc_loss: 0.404371, total_loss: 0.411526, bndry_acc: 0.706169, jnc_acc: 0.759114, total_acc: 0.732641
+stage: val, epoch: 1, bndry_loss: 0.375171, jnc_loss: 0.411563, total_loss: 0.375171, bndry_acc: 0.712272, jnc_acc: 0.776713, total_acc: 0.744493
+stage: train, epoch: 1, bndry_loss: 0.410325, jnc_loss: 0.404566, total_loss: 0.410325, bndry_acc: 0.707229, jnc_acc: 0.760151, total_acc: 0.733691
+stage: val, epoch: 2, bndry_loss: 0.373804, jnc_loss: 0.411713, total_loss: 0.373804, bndry_acc: 0.713342, jnc_acc: 0.777612, total_acc: 0.745477
+stage: train, epoch: 2, bndry_loss: 0.409047, jnc_loss: 0.404670, total_loss: 0.409047, bndry_acc: 0.708554, jnc_acc: 0.760954, total_acc: 0.734754
+stage: val, epoch: 3, bndry_loss: 0.372429, jnc_loss: 0.411817, total_loss: 0.372429, bndry_acc: 0.714886, jnc_acc: 0.777868, total_acc: 0.746378
+stage: train, epoch: 3, bndry_loss: 0.407844, jnc_loss: 0.404675, total_loss: 0.407844, bndry_acc: 0.709922, jnc_acc: 0.761720, total_acc: 0.735819
+stage: val, epoch: 4, bndry_loss: 0.371212, jnc_loss: 0.411709, total_loss: 0.371212, bndry_acc: 0.715254, jnc_acc: 0.778225, total_acc: 0.746741
+stage: train, epoch: 4, bndry_loss: 0.406652, jnc_loss: 0.404581, total_loss: 0.406652, bndry_acc: 0.711383, jnc_acc: 0.762561, total_acc: 0.736969
+stage: val, epoch: 5, bndry_loss: 0.369961, jnc_loss: 0.411561, total_loss: 0.369961, bndry_acc: 0.716518, jnc_acc: 0.779260, total_acc: 0.747889
+stage: train, epoch: 5, bndry_loss: 0.405556, jnc_loss: 0.404471, total_loss: 0.405556, bndry_acc: 0.712727, jnc_acc: 0.763287, total_acc: 0.738004
+stage: val, epoch: 6, bndry_loss: 0.368782, jnc_loss: 0.411441, total_loss: 0.368782, bndry_acc: 0.717752, jnc_acc: 0.779724, total_acc: 0.748738
+stage: train, epoch: 6, bndry_loss: 0.404484, jnc_loss: 0.404361, total_loss: 0.404484, bndry_acc: 0.714074, jnc_acc: 0.763830, total_acc: 0.738950
+stage: val, epoch: 7, bndry_loss: 0.367694, jnc_loss: 0.411372, total_loss: 0.367694, bndry_acc: 0.718652, jnc_acc: 0.780228, total_acc: 0.749440
+stage: train, epoch: 7, bndry_loss: 0.403462, jnc_loss: 0.404246, total_loss: 0.403462, bndry_acc: 0.715351, jnc_acc: 0.764160, total_acc: 0.739753
